@@ -26,7 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,16 +38,17 @@ import java.util.Map;
 import br.com.aula.cadeopovo.R;
 import br.com.aula.cadeopovo.activity.entity.RegistroMovimentacao;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends AppCompatActivity implements LocationListener, OnMapReadyCallback {
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private LocationManager locationManager = null;
+    private MapFragment mapFragment;
 
     List<RegistroMovimentacao> lstRegistroMovimentacaos = null;
 
 
-    private TextView txtLatitude, txtLongitude,txtPosicoes;
+    private TextView txtLatitude, txtLongitude, txtPosicoes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+        lstRegistroMovimentacaos = new ArrayList<>();
         mDatabase = FirebaseDatabase.getInstance();
         mDatabase.getReference().addValueEventListener(localizacaoListner);
 
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             txtPosicoes = (TextView) findViewById(R.id.txtPosicoes);
             getLocalizacao();
+            mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+            mapFragment.getMapAsync(this);
 
         } else {
             Intent it = new Intent(this, LoginActivity.class);
@@ -154,10 +159,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 400, 1, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 60, this);
 
     }
-
 
 
     ValueEventListener localizacaoListner = new ValueEventListener() {
@@ -166,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             lstRegistroMovimentacaos = new ArrayList<>();
 
 
-            for (DataSnapshot movSnapshot: dataSnapshot.child("movimentacoes").getChildren()) {
+            for (DataSnapshot movSnapshot : dataSnapshot.child("movimentacoes").getChildren()) {
 
                 RegistroMovimentacao registroMovimentacao = movSnapshot.getValue(RegistroMovimentacao.class);
                 registroMovimentacao.setUid(movSnapshot.getKey());
@@ -174,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
 
             txtPosicoes.setText(String.valueOf(lstRegistroMovimentacaos.size()));
+            mapFragment.getMapAsync(MainActivity.this);
         }
 
         @Override
@@ -183,4 +188,45 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     };
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        googleMap.setMyLocationEnabled(true);
+
+        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+
+
+        for(RegistroMovimentacao registroMovimentacao:lstRegistroMovimentacaos){
+            LatLng latLng = new LatLng(Double.parseDouble(registroMovimentacao.latitude),
+                    Double.parseDouble(registroMovimentacao.longitude));
+
+            googleMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+                    .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+                    .position(latLng));
+
+           // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+           /* if(mAuth.getUid().equals(registroMovimentacao.getUid())){
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+                googleMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+                        .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+                        .position(latLng));
+            }*/
+        }
+
+
+
+    }
 }

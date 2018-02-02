@@ -60,10 +60,11 @@
         android:onClick="clica"
         tools:layout_constraintTop_creator="1"
         android:layout_marginStart="137dp"
-        android:layout_marginTop="184dp"
+        android:layout_marginTop="462dp"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="137dp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -86,4 +87,23 @@
         app:layout_constraintTop_toBottomOf="@+id/txtLongitude"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/txtLongitude" />
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="389dp"
+        android:layout_height="467dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="147dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintHorizontal_bias="0.0"
+        tools:layout_editor_absoluteY="81dp"
+        tools:layout_editor_absoluteX="-3dp" />
 </android.support.constraint.ConstraintLayout>
