@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private FirebaseDatabase mDatabase;
     private LocationManager locationManager = null;
     private MapFragment mapFragment;
-
+    private LatLng location = null;
     List<RegistroMovimentacao> lstRegistroMovimentacaos = null;
 
 
@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onLocationChanged(Location location) {
+
+        this.location = new LatLng(location.getLatitude(),location.getLongitude());
         txtLatitude.setText(String.valueOf(location.getLatitude()));
         txtLongitude.setText(String.valueOf(location.getLongitude()));
         RegistroMovimentacao registroMovimentacao =
@@ -205,13 +207,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         googleMap.setMyLocationEnabled(true);
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-
-
+        if(MainActivity.this.location != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MainActivity.this.location, 13));
+        }
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         for(RegistroMovimentacao registroMovimentacao:lstRegistroMovimentacaos){
             LatLng latLng = new LatLng(Double.parseDouble(registroMovimentacao.latitude),
                     Double.parseDouble(registroMovimentacao.longitude));
 
             googleMap.addMarker(new MarkerOptions()
+                    .title("Pessoa")
                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
                     .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
                     .position(latLng));
