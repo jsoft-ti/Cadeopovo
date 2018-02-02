@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "496651838461",
+    "firebase_url": "https://cadeopovo-e88a8.firebaseio.com",
+    "project_id": "cadeopovo-e88a8",
+    "storage_bucket": "cadeopovo-e88a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496651838461:android:9b5675d52766620c",
+        "android_client_info": {
+          "package_name": "br.com.aula.cadeopovo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "496651838461-5g7tfi2itslodhii2acu99d4esbofanm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.aula.cadeopovo",
+            "certificate_hash": "1377a91e1075daf782e553a810d98a5c6ba05fe6"
+          }
+        },
+        {
+          "client_id": "496651838461-461j68tsnpeabrrrd5d9b9qnmkcn0842.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ3Yh8f_xAEBZ0iF-kO-masBmCuprsLZ4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "496651838461-461j68tsnpeabrrrd5d9b9qnmkcn0842.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
